@@ -21,6 +21,12 @@ public class Transaction implements Serializable {
     @Temporal(value = TemporalType.DATE)
     private LocalDate transactionDate;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Account accountTransaction;
+
+    @Column(name = "AMOUNT")
+    private Double transactionAmount;
+
     public Integer getId() {
         return id;
     }
@@ -38,8 +44,23 @@ public class Transaction implements Serializable {
     }
 
     @PrePersist
-    public void OnCreate()
-    {
+    public void OnCreate() {
         this.setTransactionDate(LocalDateTime.now().toLocalDate());
+    }
+
+    public Account getAccountTransaction() {
+        return accountTransaction;
+    }
+
+    public void setAccountTransaction(Account accountTransaction) {
+        this.accountTransaction = accountTransaction;
+    }
+
+    public Double getTransactionAmount() {
+        return transactionAmount;
+    }
+
+    public void setTransactionAmount(Double transactionAmount) {
+        this.transactionAmount = transactionAmount;
     }
 }

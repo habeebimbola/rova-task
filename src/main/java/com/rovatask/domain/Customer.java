@@ -5,13 +5,11 @@ import jakarta.validation.constraints.NotNull;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.Set;
 
 @Entity()
 @Table(name = "CUSTOMER_ACCOUNT", uniqueConstraints = @UniqueConstraint(columnNames = "CUSTOMER_ID"))
-public class CustomerAccount implements Serializable {
-
+public class Customer implements Serializable {
 
     @Id
     @Column(name = "ID")
@@ -35,9 +33,8 @@ public class CustomerAccount implements Serializable {
     @Temporal(value = TemporalType.TIMESTAMP)
     private LocalDateTime lastModifiedDate;
 
-    @Transient
-//    @OneToMany( )
-    private Set<Transaction> accountTransactions;
+    @OneToOne
+    private Account customerAccount;
 
     public Integer getId() {
         return id;
@@ -79,20 +76,20 @@ public class CustomerAccount implements Serializable {
         this.balance = balance;
     }
 
-    public Set<Transaction> getAccountTransactions() {
-        return accountTransactions;
-    }
-
-    public void setAccountTransactions(Set<Transaction> accountTransactions) {
-        this.accountTransactions = accountTransactions;
-    }
-
     public LocalDateTime getLastModifiedDate() {
         return lastModifiedDate;
     }
 
     public void setLastModifiedDate(LocalDateTime lastModifiedDate) {
         this.lastModifiedDate = lastModifiedDate;
+    }
+
+    public Account getCustomerAccount() {
+        return customerAccount;
+    }
+
+    public void setCustomerAccount(Account customerAccount) {
+        this.customerAccount = customerAccount;
     }
 
     @PreUpdate

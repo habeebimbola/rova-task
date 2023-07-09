@@ -13,7 +13,7 @@ public class CustomerDto {
     private String firstName;
     @JsonProperty("surname")
     private String surname;
-    @JsonProperty("balanc")
+    @JsonProperty("balance")
     private Double balance;
 
     @JsonProperty("transactionsList")
