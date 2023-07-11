@@ -5,7 +5,6 @@ import jakarta.validation.constraints.NotNull;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Set;
 
 @Entity()
 @Table(name = "CUSTOMER_ACCOUNT", uniqueConstraints = @UniqueConstraint(columnNames = "CUSTOMER_ID"))
@@ -26,14 +25,12 @@ public class Customer implements Serializable {
     @Column(name = "SURNAME", nullable = false)
     private String surname;
 
-    @Column(name = "BALANCE", nullable = false)
-    private Double balance;
-
-    @Column(name = "DATE_MODIFIED_DATE")
+    @Column(name = "LAST_MODIFIED_DATE")
     @Temporal(value = TemporalType.TIMESTAMP)
     private LocalDateTime lastModifiedDate;
 
     @OneToOne
+    @JoinColumn(name = "ID")
     private Account customerAccount;
 
     public Integer getId() {
@@ -66,14 +63,6 @@ public class Customer implements Serializable {
 
     public void setSurname(String surname) {
         this.surname = surname;
-    }
-
-    public Double getBalance() {
-        return balance;
-    }
-
-    public void setBalance(Double balance) {
-        this.balance = balance;
     }
 
     public LocalDateTime getLastModifiedDate() {

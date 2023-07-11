@@ -73,7 +73,7 @@ public class TransactionServiceImp implements TransactionService{
         CustomerDto customerDto = new CustomerDto();
 
         customerDto.setFirstName(customer.getFirstName());
-        customerDto.setBalance(customer.getBalance());
+        customerDto.setBalance(customer.getCustomerAccount().getInitialBalance());
         customerDto.setSurname(customer.getSurname());
         customerDto.setTransactions(customer.getCustomerAccount().getTransactionList());
 

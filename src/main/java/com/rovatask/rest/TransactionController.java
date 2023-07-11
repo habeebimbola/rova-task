@@ -31,15 +31,21 @@ public class TransactionController {
         }
 
         CustomerDto customerDto = this.transactionService.createNewCurrentAccount(accountDto.getCustomerID(), accountDto.getInitialCredit());
-        
 
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().build("{fullname}",customerDto.getSurname().concat(customerDto.getFirstName()));
-        return ResponseEntity.created(uri).build();
+
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().buildAndExpand("{fullname}",customerDto.getSurname().concat(customerDto.getFirstName())).toUri();
+//        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().build("{fullname}","Habeeb Animashaun");
+        return ResponseEntity.created(uri).header("Location",uri.toString()).build();
     }
 
     @GetMapping("/customer-detail/{custId}")
-    public ResponseEntity<CustomerDto> viewCustomerDetail(@PathVariable("custId") Integer customerId)
+    public ResponseEntity<?> viewCustomerDetail(@PathVariable("custId") Integer customerId)
     {
+
+        if(customerId == null)
+        {
+            return ResponseEntity.badRequest().body("Invalid Customer ID Parameter");
+        }
         CustomerDto customerDto = this.transactionService.findCustomerAccount(customerId);
         return ResponseEntity.ok(customerDto);
     }
