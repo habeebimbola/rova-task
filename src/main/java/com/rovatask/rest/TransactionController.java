@@ -1,7 +1,9 @@
 package com.rovatask.rest;
 
+import com.rovatask.domain.Account;
 import com.rovatask.domain.dto.AccountDto;
 import com.rovatask.domain.dto.CustomerDto;
+import com.rovatask.service.AccountService;
 import com.rovatask.service.TransactionService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -16,9 +18,11 @@ import java.net.URI;
 public class TransactionController {
 
     private final TransactionService transactionService;
+    private final AccountService accountService;
 
-    public TransactionController(TransactionService transactionService) {
+    public TransactionController(TransactionService transactionService, AccountService accountService) {
         this.transactionService = transactionService;
+        this.accountService = accountService;
     }
 
     @PostMapping("/create-account")
@@ -27,14 +31,12 @@ public class TransactionController {
 
         if(bindingResult.hasErrors())
         {
-            return ResponseEntity.badRequest().body("");
+            return ResponseEntity.badRequest().body("Invalid Input Parameters.");
         }
 
-        CustomerDto customerDto = this.transactionService.createNewCurrentAccount(accountDto.getCustomerID(), accountDto.getInitialCredit());
+        AccountDto savedAccountDto = this.accountService.createNewCurrentAccount(accountDto);
 
-
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().buildAndExpand("{fullname}",customerDto.getSurname().concat(customerDto.getFirstName())).toUri();
-//        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().build("{fullname}","Habeeb Animashaun");
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().buildAndExpand("{fullname}",savedAccountDto.getAccountName()).toUri();
         return ResponseEntity.created(uri).header("Location",uri.toString()).build();
     }
 
@@ -46,6 +48,7 @@ public class TransactionController {
         {
             return ResponseEntity.badRequest().body("Invalid Customer ID Parameter");
         }
+
         CustomerDto customerDto = this.transactionService.findCustomerAccount(customerId);
         return ResponseEntity.ok(customerDto);
     }

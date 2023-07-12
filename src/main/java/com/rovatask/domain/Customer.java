@@ -7,12 +7,12 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Entity()
-@Table(name = "CUSTOMER_ACCOUNT", uniqueConstraints = @UniqueConstraint(columnNames = "CUSTOMER_ID"))
+@Table(name = "CUSTOMER", uniqueConstraints = @UniqueConstraint(columnNames = "CUSTOMER_ID"))
 public class Customer implements Serializable {
 
     @Id
     @Column(name = "ID")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(name = "CUSTOMER_ID", nullable = false, unique = true)
@@ -29,8 +29,11 @@ public class Customer implements Serializable {
     @Temporal(value = TemporalType.TIMESTAMP)
     private LocalDateTime lastModifiedDate;
 
-    @OneToOne
-    @JoinColumn(name = "ID")
+    @Column(name = "ACCOUNT_ID")
+    private Integer accountId;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ID", referencedColumnName = "ACCOUNT_ID")
     private Account customerAccount;
 
     public Integer getId() {
@@ -73,17 +76,25 @@ public class Customer implements Serializable {
         this.lastModifiedDate = lastModifiedDate;
     }
 
-    public Account getCustomerAccount() {
-        return customerAccount;
+    public Integer getAccountId() {
+        return accountId;
     }
 
-    public void setCustomerAccount(Account customerAccount) {
-        this.customerAccount = customerAccount;
+    public void setAccountId(Integer accountId) {
+        this.accountId = accountId;
     }
 
     @PreUpdate
     public void updateLastModifiedDate()
     {
         this.setLastModifiedDate(LocalDateTime.now());
+    }
+
+    public Account getCustomerAccount() {
+        return customerAccount;
+    }
+
+    public void setCustomerAccount(Account customerAccount) {
+        this.customerAccount = customerAccount;
     }
 }

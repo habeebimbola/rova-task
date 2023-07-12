@@ -14,15 +14,15 @@ public class Transaction implements Serializable {
 
     @Id
     @Column(name = "ID")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @CreatedDate()
     @Column(name = "CREATED_DATE")
     @Temporal(value = TemporalType.DATE)
     private LocalDate transactionDate;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Account accountTransaction;
+    @Column(name = "ACCOUNT_ID")
+    private Integer accountId;
 
     @Column(name = "AMOUNT")
     private Double transactionAmount;
@@ -48,19 +48,19 @@ public class Transaction implements Serializable {
         this.setTransactionDate(LocalDateTime.now().toLocalDate());
     }
 
-    public Account getAccountTransaction() {
-        return accountTransaction;
-    }
-
-    public void setAccountTransaction(Account accountTransaction) {
-        this.accountTransaction = accountTransaction;
-    }
-
     public Double getTransactionAmount() {
         return transactionAmount;
     }
 
     public void setTransactionAmount(Double transactionAmount) {
         this.transactionAmount = transactionAmount;
+    }
+
+    public Integer getAccountId() {
+        return accountId;
+    }
+
+    public void setAccountId(Integer accountId) {
+        this.accountId = accountId;
     }
 }

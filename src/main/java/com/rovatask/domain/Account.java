@@ -13,24 +13,24 @@ import java.util.List;
 public class Account implements Serializable {
 
     @Id
-    @Column(name = "ID")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "ID", insertable = true)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(name = "INITIAL_BALANCE")
     private Double initialBalance;
 
-    @OneToOne(mappedBy = "customerAccount")
+    @OneToOne(mappedBy = "customerAccount",orphanRemoval = true)
     private Customer accountOwner;
 
     @Column(name = "ACCOUNT_TYPE")
     @Enumerated(value = EnumType.STRING)
     private AccountType accountType;
 
-    @OneToMany(mappedBy = "accountTransaction",fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.LAZY, orphanRemoval = true)
+    @JoinColumn(name = "ACCOUNT_ID", referencedColumnName = "ID")
     private List<Transaction> transactionList = new ArrayList<>();
 
-    @CreatedDate
     @Temporal(value = TemporalType.TIMESTAMP)
     @Column(name = "CREATION_DATE")
     private LocalDateTime createdDate;
@@ -86,12 +86,18 @@ public class Account implements Serializable {
     public void addTransaction(Transaction transaction)
     {
         this.getTransactionList().add(transaction);
-        transaction.setAccountTransaction(this);
+//        transaction.setAccountTransaction(this);
     }
 
     public void removeTransaction(Transaction transaction)
     {
         this.getTransactionList().remove(transaction);
-        transaction.setAccountTransaction(null);
+//        transaction.setAccountTransaction(null);
+    }
+
+    @PrePersist
+    public void onCreate()
+    {
+        setCreatedDate(LocalDateTime.now());
     }
 }
