@@ -3,7 +3,10 @@ package com.rovatask.domain.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.rovatask.domain.AccountType;
+import com.rovatask.domain.Transaction;
 import jakarta.validation.constraints.NotNull;
+
+import java.util.List;
 
 @JsonSerialize
 public class AccountDto {
@@ -21,6 +24,8 @@ public class AccountDto {
     private AccountType accountType;
 
     private String accountName;
+
+    private List<Transaction> transactions;
 
     public Integer getCustomerID() {
         return customerID;
@@ -60,5 +65,13 @@ public class AccountDto {
 
     public void setAccountName(String accountName) {
         this.accountName = accountName;
+    }
+
+    public void setTransactions(List<Transaction> transactionList) {
+        this.transactions = transactionList;
+    }
+
+    public List<Transaction> getTransactions() {
+        return transactions;
     }
 }

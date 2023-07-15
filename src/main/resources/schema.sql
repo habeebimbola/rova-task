@@ -1,5 +1,6 @@
 CREATE TABLE ACCOUNT(ID INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                      INITIAL_BALANCE DECIMAL,
+                      INITIAL_BALANCE DECIMAL DEFAULT 0,
+                      ACCOUNT_NUMBER INTEGER NOT NULL,
                       ACCOUNT_TYPE VARCHAR(100) NOT NULL DEFAULT 'DEFAULT_ACCOUNT',
                       CREATION_DATE TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
                      );
@@ -8,7 +9,8 @@ CREATE TABLE CUSTOMER( ID INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
                                 ACCOUNT_ID INTEGER NOT NULL,
                                 CUSTOMER_ID INTEGER NOT NULL UNIQUE,
                                 FIRST_NAME VARCHAR(250) NOT NULL,
-                                SURNAME VARCHAR(250), BALANCE DECIMAL,
+                                SURNAME VARCHAR(250),
+                                BALANCE DECIMAL,
                                 LAST_MODIFIED_DATE DATE NOT NULL DEFAULT CURRENT_TIMESTAMP,
                                 FOREIGN KEY(ACCOUNT_ID) REFERENCES ACCOUNT(ID));
 

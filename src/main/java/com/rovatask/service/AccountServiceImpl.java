@@ -7,6 +7,8 @@ import com.rovatask.domain.dto.AccountDto;
 import com.rovatask.domain.dto.TransactionDto;
 import com.rovatask.repo.AccountRepository;
 import com.rovatask.repo.CustomerRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,7 @@ import java.util.Optional;
 @Service
 public class AccountServiceImpl implements AccountService{
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(AccountServiceImpl.class);
     private final AccountRepository accountRepository;
     private final CustomerRepository customerRepository;
 
@@ -48,6 +51,7 @@ public class AccountServiceImpl implements AccountService{
         account.setAccountType(AccountType.CURRENT_ACCOUNT);
         account.setAccountOwner(customerOptional.get());
         account.setInitialBalance(accountDto.getInitialCredit());
+        account.setAccountNumber(customerOptional.get().getCustomerAccount().getAccountNumber());
 
         Account newAccount = this.accountRepository.save(account);
 
@@ -64,6 +68,26 @@ public class AccountServiceImpl implements AccountService{
 
 
         return  newAccountDto;
+    }
+
+    @Override
+    public Optional<AccountDto> findAccountById(Integer accountNumber) {
+
+        Optional<Account> accountOptional = this.accountRepository.findByAccountNumber(accountNumber);
+        if (!accountOptional.isPresent())
+        {
+            throw new RuntimeException("Account Not Found");
+        }
+
+         Account account = accountOptional.get();
+         AccountDto accountDto = new AccountDto();
+         accountDto.setAccountName(account.getAccountOwner().getSurname());
+         accountDto.setAccountType(account.getAccountType());
+         accountDto.setCustomerID(account.getAccountOwner().getCustomerId());
+         LOGGER.info("Transactions: "+account.getTransactionList().size());
+         accountDto.setTransactions(account.getTransactionList());
+
+        return Optional.of(accountDto);
     }
 
     private void addNewTransaction(Account account, Double initialCredit) {

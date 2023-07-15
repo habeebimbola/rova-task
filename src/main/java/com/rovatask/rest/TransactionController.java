@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("api")
@@ -51,5 +52,17 @@ public class TransactionController {
 
         CustomerDto customerDto = this.transactionService.findCustomerAccount(customerId);
         return ResponseEntity.ok(customerDto);
+    }
+
+    @GetMapping("/get-account/{accountId}")
+    public ResponseEntity<AccountDto> getAccount(@PathVariable("accountId") Integer accountId)
+    {
+        Optional<AccountDto> accountDtoOptional  = this.accountService.findAccountById(accountId);
+
+        if (!accountDtoOptional.isPresent())
+        {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.of(accountDtoOptional);
     }
 }

@@ -17,6 +17,9 @@ public class Account implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(name = "ACCOUNT_NUMBER")
+    private Integer accountNumber;
+
     @Column(name = "INITIAL_BALANCE")
     private Double initialBalance;
 
@@ -93,6 +96,15 @@ public class Account implements Serializable {
     {
         this.getTransactionList().remove(transaction);
 //        transaction.setAccountTransaction(null);
+    }
+
+
+    public Integer getAccountNumber() {
+        return accountNumber;
+    }
+
+    public void setAccountNumber(Integer accountNumber) {
+        this.accountNumber = accountNumber;
     }
 
     @PrePersist

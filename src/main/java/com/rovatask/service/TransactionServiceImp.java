@@ -8,6 +8,8 @@ import com.rovatask.domain.dto.CustomerDto;
 import com.rovatask.domain.dto.TransactionDto;
 import com.rovatask.repo.CustomerRepository;
 import com.rovatask.repo.TransactionRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -16,6 +18,7 @@ import java.util.Optional;
 @Service
 public class TransactionServiceImp implements TransactionService{
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(TransactionServiceImp.class);
     private final TransactionRepository transactionRepository;
     private final CustomerRepository customerRepository;
 
@@ -26,6 +29,7 @@ public class TransactionServiceImp implements TransactionService{
 
     @Override
     public CustomerDto findCustomerAccount(Integer customerId) {
+
         Optional<Customer> customerAccountOptional = this.customerRepository.findByCustomerId(customerId);
 
         if(!customerAccountOptional.isPresent())
@@ -34,7 +38,6 @@ public class TransactionServiceImp implements TransactionService{
         }
         Customer customer = customerAccountOptional.get();
         CustomerDto customerDto = new CustomerDto();
-
         customerDto.setFirstName(customer.getFirstName());
         customerDto.setBalance(customer.getCustomerAccount().getInitialBalance());
         customerDto.setSurname(customer.getSurname());
