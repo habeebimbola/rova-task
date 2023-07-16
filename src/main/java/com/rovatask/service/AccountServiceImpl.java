@@ -64,7 +64,7 @@ public class AccountServiceImpl implements AccountService{
         newAccountDto.setAccountType(newAccount.getAccountType());
         newAccountDto.setCustomerID(newAccount.getAccountOwner().getCustomerId());
         newAccountDto.setInitialCredit(newAccount.getInitialBalance());
-        newAccountDto.setAccountName(newAccount.getAccountOwner().getSurname()+" "+newAccount.getAccountOwner().getSurname());
+        newAccountDto.setAccountName(newAccount.getAccountOwner().getFirstName()+"-"+newAccount.getAccountOwner().getSurname());
 
 
         return  newAccountDto;

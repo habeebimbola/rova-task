@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.rovatask.domain.AccountType;
 import com.rovatask.domain.Transaction;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
 import java.util.List;
 
@@ -12,9 +13,10 @@ import java.util.List;
 public class AccountDto {
 
     @JsonProperty("customerID")
-    @NotNull
+    @NotNull(message = "Customer ID Cannot Be Null")
     private Integer customerID;
 
+    @Positive(message = "Only Positive Values Are Allowed")
     @JsonProperty("initialCredit")
     @NotNull
     private Double initialCredit;
